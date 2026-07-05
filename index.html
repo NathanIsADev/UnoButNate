@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
   <title>Uno Online</title>
-  <!-- v2 - idx fix -->
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #1a1a2e; color: #eee; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
@@ -95,7 +94,8 @@
   const SUPABASE_URL = "https://ftpsgzwmafbdxuvtutrr.supabase.co";
   const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ0cHNnendtYWZiZHh1dnR1dHJyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMxOTg3ODMsImV4cCI6MjA5ODc3NDc4M30.Vlr5FP1HnYjyS35mz5XT7h8eM1Y3sNOHo1odqI3_S2U";
 
-  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  // ⚠️ Changed to "var" to prevent SyntaxError if script gets loaded twice
+  var supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
   // ---------- SLURS FILTER ----------
   const SLURS = ["nigger","nigga","faggot","retard","cunt","chink","spic","kike","wetback","tranny","dyke"];
@@ -441,7 +441,7 @@
     }
     const dir = gs.direction;
     const order = gs.turnOrder;
-    let idx = gs.currentPlayerIndex;   // only declaration of idx in this scope
+    let idx = gs.currentPlayerIndex;
     if (myHand.length === 1) {
       if (!gs.unoVulnerable) gs.unoVulnerable = myPlayerId;
     }
@@ -485,7 +485,7 @@
     if (canPlay(drawn, topCard, gs.chosenColor)) {
       const play = confirm(`You drew ${drawn.color} ${drawn.value}. Play it?`);
       if (play) {
-        const cardIdx = myHand.length-1;      // renamed, no conflict
+        const cardIdx = myHand.length-1;        // no conflict
         myHand.splice(cardIdx, 1);
         gs.discard.push(drawn);
         if (drawn.color === "wild" || drawn.value === "wild4") {
@@ -495,7 +495,7 @@
         } else gs.chosenColor = drawn.color;
         const dir = gs.direction;
         const order = gs.turnOrder;
-        let turnIdx = gs.currentPlayerIndex;  // renamed, no conflict
+        let turnIdx = gs.currentPlayerIndex;    // no conflict
         if (myHand.length === 1) gs.unoVulnerable = myPlayerId;
         if (drawn.value === "draw2") {
           const nextIdx = (turnIdx + dir + order.length) % order.length;
