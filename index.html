@@ -382,6 +382,10 @@
 
   document.getElementById("leaveLobbyBtn").addEventListener("click", leaveLobby);
   async function leaveLobby() {
+    // Remove any lingering win video or splash
+    document.querySelectorAll('.video-overlay').forEach(el => el.remove());
+    document.querySelectorAll('.victory-splash').forEach(el => el.remove());
+
     if (currentLobbyId && myPlayerId) {
       const { data } = await supabase.from("lobbies").select("players,version").eq("id", currentLobbyId).single();
       if (data && data.players[myPlayerId]) {
@@ -854,11 +858,12 @@
     videoOverlay.className = "video-overlay";
     videoOverlay.innerHTML = `
       <div class="video-container">
-        <iframe src="https://www.youtube.com/embed/RVmUx9FERDE?autoplay=1&controls=0&modestbranding=1&rel=0&showinfo=0&fs=0&iv_load_policy=3" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        <iframe src="https://www.youtube.com/embed/RVmUx9FERDE?autoplay=1&controls=0&modestbranding=1&rel=0&showinfo=0&fs=0&iv_load_policy=3&mute=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
       </div>`;
     document.body.appendChild(videoOverlay);
     setTimeout(() => {
       videoOverlay.remove();
+      document.querySelectorAll('.victory-splash').forEach(el => el.remove());
       const messages = [
         `${winnerName.toUpperCase()} HAS WON THE GAME`,
         `${winnerName.toUpperCase()} has acquired victory`,
