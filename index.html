@@ -666,7 +666,6 @@
     }).eq("id", currentLobbyId).eq("version", data.version);
   }
 
-  // Stacking functions with timeout reset
   async function attemptStack(card, index) {
     const { data } = await supabase.from("lobbies").select("game_state,version").eq("id", currentLobbyId).single();
     if (!data || !data.game_state) return;
