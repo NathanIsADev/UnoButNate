@@ -879,7 +879,8 @@
     }
   }
 
-  function showVictory(winnerId, players) {
+   function showVictory(winnerId, players) {
+    const VIDEO_DURATION_SECONDS = 61; // <-- change this to the number of seconds you want
     const winnerName = players[winnerId]?.username || "Unknown";
     const videoOverlay = document.createElement("div");
     videoOverlay.className = "video-overlay";
@@ -891,6 +892,18 @@
         `${winnerName.toUpperCase()} HAS WON THE GAME`,
         `${winnerName.toUpperCase()} has acquired victory`,
         `Victory to ${winnerName.toUpperCase()}`
+      ];
+      const msg = messages[Math.floor(Math.random() * messages.length)];
+      const splash = document.createElement("div");
+      splash.className = "victory-splash";
+      splash.textContent = msg;
+      document.body.appendChild(splash);
+      updateGameState({ gameOver: true });
+      document.getElementById("leaveGameBtn").style.background = "#ffdd00";
+      document.getElementById("leaveGameBtn").style.color = "#000";
+      document.getElementById("leaveGameBtn").style.fontWeight = "bold";
+    }, VIDEO_DURATION_SECONDS * 1000);
+  }
       ];
       const msg = messages[Math.floor(Math.random() * messages.length)];
       const splash = document.createElement("div");
