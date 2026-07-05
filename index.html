@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
   <title>Uno Online</title>
+  <!-- v2 - idx fix -->
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #1a1a2e; color: #eee; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
@@ -90,7 +91,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-  // ✅ Your Supabase credentials
+  // Your Supabase credentials
   const SUPABASE_URL = "https://ftpsgzwmafbdxuvtutrr.supabase.co";
   const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ0cHNnendtYWZiZHh1dnR1dHJyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMxOTg3ODMsImV4cCI6MjA5ODc3NDc4M30.Vlr5FP1HnYjyS35mz5XT7h8eM1Y3sNOHo1odqI3_S2U";
 
@@ -440,7 +441,7 @@
     }
     const dir = gs.direction;
     const order = gs.turnOrder;
-    let idx = gs.currentPlayerIndex;
+    let idx = gs.currentPlayerIndex;   // only declaration of idx in this scope
     if (myHand.length === 1) {
       if (!gs.unoVulnerable) gs.unoVulnerable = myPlayerId;
     }
@@ -484,7 +485,7 @@
     if (canPlay(drawn, topCard, gs.chosenColor)) {
       const play = confirm(`You drew ${drawn.color} ${drawn.value}. Play it?`);
       if (play) {
-        const cardIdx = myHand.length-1;        // ✅ renamed from idx
+        const cardIdx = myHand.length-1;      // renamed, no conflict
         myHand.splice(cardIdx, 1);
         gs.discard.push(drawn);
         if (drawn.color === "wild" || drawn.value === "wild4") {
@@ -494,7 +495,7 @@
         } else gs.chosenColor = drawn.color;
         const dir = gs.direction;
         const order = gs.turnOrder;
-        let turnIdx = gs.currentPlayerIndex;    // ✅ renamed from idx (avoids redeclaration)
+        let turnIdx = gs.currentPlayerIndex;  // renamed, no conflict
         if (myHand.length === 1) gs.unoVulnerable = myPlayerId;
         if (drawn.value === "draw2") {
           const nextIdx = (turnIdx + dir + order.length) % order.length;
@@ -557,7 +558,7 @@
 
   document.getElementById("leaveGameBtn").addEventListener("click", leaveLobby);
 
-  // Subscribe to game state changes for realtime rendering
+  // Realtime subscription
   supabase
     .channel("game-" + (currentLobbyId || "dummy"))
     .on("postgres_changes", { event: "*", schema: "public", table: "lobbies", filter: `id=eq.${currentLobbyId}` }, (payload) => {
