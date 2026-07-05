@@ -94,7 +94,7 @@
   const SUPABASE_URL = "https://ftpsgzwmafbdxuvtutrr.supabase.co";
   const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ0cHNnendtYWZiZHh1dnR1dHJyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMxOTg3ODMsImV4cCI6MjA5ODc3NDc4M30.Vlr5FP1HnYjyS35mz5XT7h8eM1Y3sNOHo1odqI3_S2U";
 
-  // ⚠️ Changed to "var" to prevent SyntaxError if script gets loaded twice
+  // Use var to avoid SyntaxError if script gets loaded twice
   var supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
   // ---------- SLURS FILTER ----------
@@ -150,7 +150,8 @@
   });
 
   document.getElementById("createConfirmBtn").addEventListener("click", async () => {
-    const code = document.getElementById("lobbyNameInput").value.trim() || generateCode();
+    // ✅ FIX: force lobby code to UPPERCASE so joining is case-insensitive
+    const code = (document.getElementById("lobbyNameInput").value.trim() || generateCode()).toUpperCase();
     const pass = document.getElementById("lobbyPassCreate").value;
     const max = parseInt(document.getElementById("maxPlayersInput").value) || 4;
     if (!myUsername) return alert("Set username first.");
@@ -169,6 +170,7 @@
   });
 
   document.getElementById("joinConfirmBtn").addEventListener("click", async () => {
+    // Keep uppercase for join lookup
     const code = document.getElementById("joinCodeInput").value.trim().toUpperCase();
     const pass = document.getElementById("joinPassInput").value;
     if (!code || !myUsername) return alert("Enter code and username.");
@@ -485,7 +487,7 @@
     if (canPlay(drawn, topCard, gs.chosenColor)) {
       const play = confirm(`You drew ${drawn.color} ${drawn.value}. Play it?`);
       if (play) {
-        const cardIdx = myHand.length-1;        // no conflict
+        const cardIdx = myHand.length-1;
         myHand.splice(cardIdx, 1);
         gs.discard.push(drawn);
         if (drawn.color === "wild" || drawn.value === "wild4") {
@@ -495,7 +497,7 @@
         } else gs.chosenColor = drawn.color;
         const dir = gs.direction;
         const order = gs.turnOrder;
-        let turnIdx = gs.currentPlayerIndex;    // no conflict
+        let turnIdx = gs.currentPlayerIndex;
         if (myHand.length === 1) gs.unoVulnerable = myPlayerId;
         if (drawn.value === "draw2") {
           const nextIdx = (turnIdx + dir + order.length) % order.length;
