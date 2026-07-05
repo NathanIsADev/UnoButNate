@@ -157,16 +157,20 @@
     .card.yellow { background: #f1c40f; color: black; }
     .card.wild { background: linear-gradient(135deg, red, blue, green, yellow); color: white; }
     .card-back {
+      width: 40px;
+      height: 56px;
       background: #000;
       color: #ffdd00;
       border: 2px solid #ffdd00;
+      border-radius: 6px;
       display: flex;
       justify-content: center;
       align-items: center;
       font-weight: bold;
-      font-size: 14px;
+      font-size: 12px;
       cursor: default;
       user-select: none;
+      margin: 1px;
     }
     .opponent-container {
       position: absolute;
@@ -174,27 +178,27 @@
       flex-direction: column;
       align-items: center;
       pointer-events: none;
+      transform: translate(-50%, -50%);
     }
     .opponent-cards {
       display: flex;
-      flex-wrap: wrap;
+      flex-direction: row;
       justify-content: center;
-      max-width: 100px;
     }
     .opponent-username {
       font-size: 12px;
       color: #ffdd00;
       margin-top: 4px;
       text-align: center;
+      max-width: 100px;
       word-wrap: break-word;
-      max-width: 80px;
     }
     .hand {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
       max-width: 100%;
-      margin-top: 20px;
+      margin-top: 10px;
     }
     .player-hand-label { font-size: 14px; margin-bottom: 5px; color: #ffdd00; }
     .turn-indicator { font-size: 18px; font-weight: bold; color: #ffdd00; }
@@ -276,7 +280,8 @@
       <p>Code: <strong id="lobbyCodeDisplay"></strong></p>
       <ul id="playerList" class="player-list"></ul>
       <div id="lobbyActions">
-        <div style="display:flex; align-items:center; gap:10px;">
+        <!-- OP-only controls: hidden by default, shown only if player is OP -->
+        <div id="lobbyOPActions" style="display:none;">
           <button id="startGameBtn" class="btn btn-warning">Start Game</button>
           <label style="color:#ffdd00; display:flex; align-items:center; gap:5px;">
             <input type="checkbox" id="foreverStackingCheck"> Forever Stacking
@@ -289,7 +294,6 @@
       <div class="game-area">
         <div class="turn-indicator" id="turnInfo"></div>
         <div class="play-field" id="playField">
-          <!-- Opponents will be positioned here dynamically -->
           <div class="center-pile">
             <div class="discard-pile">
               <div id="deckCard" class="card">🂠</div>
@@ -313,20 +317,17 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-  // Your Supabase credentials
   const SUPABASE_URL = "https://ftpsgzwmafbdxuvtutrr.supabase.co";
   const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ0cHNnendtYWZiZHh1dnR1dHJyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMxOTg3ODMsImV4cCI6MjA5ODc3NDc4M30.Vlr5FP1HnYjyS35mz5XT7h8eM1Y3sNOHo1odqI3_S2U";
 
   var supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  // ---------- SLURS FILTER ----------
   const SLURS = ["nigger","nigga","faggot","retard","cunt","chink","spic","kike","wetback","tranny","dyke"];
   function containsSlur(username) {
     const words = username.toLowerCase().split(/[^a-z]+/).filter(w => w.length > 0);
     return words.some(w => SLURS.includes(w));
   }
 
-  // ---------- GLOBAL STATE ----------
   let myUsername = sessionStorage.getItem("unoUsername") || "";
   let myPlayerId = sessionStorage.getItem("unoPlayerId") || generateId();
   let currentLobbyId = null;
@@ -350,7 +351,6 @@
     document.querySelectorAll(".screen").forEach(s => s.classList.add("hidden"));
   }
 
-  // ---------- UI MANAGEMENT ----------
   document.getElementById("setUsernameBtn").addEventListener("click", () => {
     const name = document.getElementById("usernameInput").value.trim();
     if (!name) return alert("Enter a username.");
@@ -444,8 +444,8 @@
         const myData = players[myPlayerId];
         if (!myData) { leaveLobby(); return alert("You were removed."); }
         const isOP = myData.isOP;
-        document.getElementById("startGameBtn").style.display = isOP ? "inline-block" : "none";
-        document.getElementById("foreverStackingCheck").style.display = isOP ? "inline-block" : "none";
+        // Show/hide OP-only controls
+        document.getElementById("lobbyOPActions").style.display = isOP ? "block" : "none";
         renderPlayerList(players, isOP);
       })
       .subscribe();
@@ -624,17 +624,17 @@
     deckEl.onclick = (isMyTurn && !gs.gameOver && drawStackCount === 0) ? () => drawCard() : null;
     deckEl.style.cursor = (isMyTurn && !gs.gameOver && drawStackCount === 0) ? "pointer" : "default";
 
-    // Opponents circular display
+    // Render opponents around the center
     const playField = document.getElementById("playField");
     playField.querySelectorAll('.opponent-container').forEach(el => el.remove());
     const opponentIds = gs.turnOrder.filter(id => id !== myPlayerId);
-    const radius = 120;
+    const radius = 130;
     const centerX = playField.offsetWidth / 2;
     const centerY = playField.offsetHeight / 2;
     opponentIds.forEach((id, index) => {
       const angle = (index / opponentIds.length) * 2 * Math.PI - Math.PI/2;
-      const x = centerX + radius * Math.cos(angle) - 30;
-      const y = centerY + radius * Math.sin(angle) - 42.5;
+      const x = centerX + radius * Math.cos(angle);
+      const y = centerY + radius * Math.sin(angle);
       const container = document.createElement("div");
       container.className = "opponent-container";
       container.style.left = x + "px";
@@ -642,16 +642,17 @@
       const cardsDiv = document.createElement("div");
       cardsDiv.className = "opponent-cards";
       const count = gs.hands[id]?.length || 0;
-      for (let i=0; i<Math.min(count, 5); i++) {
+      const maxVisible = 3;
+      for (let i=0; i<Math.min(count, maxVisible); i++) {
         const cardBack = document.createElement("div");
-        cardBack.className = "card card-back";
+        cardBack.className = "card-back";
         cardBack.textContent = "UNO";
         cardsDiv.appendChild(cardBack);
       }
-      if (count > 5) {
+      if (count > maxVisible) {
         const more = document.createElement("div");
-        more.className = "card card-back";
-        more.textContent = `+${count-5}`;
+        more.className = "card-back";
+        more.textContent = `+${count - maxVisible}`;
         cardsDiv.appendChild(more);
       }
       const usernameLabel = document.createElement("div");
@@ -662,7 +663,6 @@
       playField.appendChild(container);
     });
 
-    // Hand
     const handDiv = document.getElementById("yourHand");
     handDiv.innerHTML = "";
     myHand.forEach((card, i) => {
@@ -680,7 +680,6 @@
       handDiv.appendChild(cEl);
     });
 
-    // Stacking UI
     const stackDiv = document.getElementById("stackActions");
     stackDiv.innerHTML = "";
     if (drawStackCount > 0 && isMyTurn && !gs.gameOver) {
@@ -702,12 +701,11 @@
 
     document.getElementById("announcement").textContent = gs.announcement || "";
 
-    // Auto-draw if no playable cards and it's your turn (not stacking)
+    // Auto-draw if no playable cards and it's my turn (not stacking)
     if (isMyTurn && !gs.gameOver && drawStackCount === 0 && myHand.length > 0) {
       const top = gs.discard[gs.discard.length-1];
       const playable = myHand.some(c => canPlay(c, top, gs.chosenColor));
       if (!playable) {
-        // Trigger auto-draw (will update state and re-render)
         setTimeout(() => autoDraw(), 100);
       }
     }
@@ -851,7 +849,6 @@
       if (!gs.announcement) gs.announcement = `${myUsername} played +${gs.drawStackCount}`;
     } else if (card.value === "reverse") {
       if (order.length === 2) {
-        // Reverse acts as skip in 2-player
         idx = (idx + dir + order.length) % order.length;
         gs.currentPlayerIndex = idx;
         gs.announcement = `${myUsername} played Reverse (skip)`;
@@ -955,7 +952,6 @@
     let gs = data.game_state;
     if (gs.gameOver) return;
     const myHand = gs.hands[myPlayerId];
-    // Extra safety check: only draw if still my turn and no playable cards
     if (gs.turnOrder[gs.currentPlayerIndex] !== myPlayerId) return;
     const top = gs.discard[gs.discard.length-1];
     if (myHand.some(c => canPlay(c, top, gs.chosenColor))) return;
@@ -966,7 +962,6 @@
     const drawn = gs.deck.pop();
     myHand.push(drawn);
     gs.announcement = `${myUsername} had to draw a card`;
-    // Do not ask to play; turn passes automatically
     gs.currentPlayerIndex = (gs.currentPlayerIndex + gs.direction + gs.turnOrder.length) % gs.turnOrder.length;
     gs.unoVulnerable = null;
     await supabase.from("lobbies").update({
