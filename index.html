@@ -6,249 +6,49 @@
   <title>Uno Online</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: 'Segoe UI', Tahoma, sans-serif;
-      background: #000;
-      color: #ffdd00;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-    }
-    #app {
-      width: 100%;
-      max-width: 750px;
-      padding: 15px;
-    }
-    .uno-title {
-      font-size: 3em;
-      font-weight: 900;
-      text-align: center;
-      letter-spacing: 5px;
-      margin: 10px 0;
-      color: #ffdd00;
-      text-shadow: 2px 2px 4px #000;
-    }
-    #top-bar {
-      background: #111;
-      padding: 12px;
-      border-radius: 12px;
-      margin-bottom: 15px;
-      display: flex;
-      gap: 10px;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-    #top-bar input {
-      flex: 1;
-      padding: 8px 12px;
-      border-radius: 8px;
-      border: none;
-      font-size: 16px;
-      background: #222;
-      color: #ffdd00;
-    }
-    #top-bar button {
-      padding: 8px 16px;
-      background: #ffdd00;
-      color: #000;
-      border: none;
-      border-radius: 8px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    .screen {
-      background: #111;
-      padding: 20px;
-      border-radius: 16px;
-      border: 1px solid #ffdd00;
-    }
+    body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #000; color: #ffdd00; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+    #app { width: 100%; max-width: 750px; padding: 15px; }
+    .uno-title { font-size: 3em; font-weight: 900; text-align: center; letter-spacing: 5px; margin: 10px 0; color: #ffdd00; text-shadow: 2px 2px 4px #000; }
+    #top-bar { background: #111; padding: 12px; border-radius: 12px; margin-bottom: 15px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+    #top-bar input { flex: 1; padding: 8px 12px; border-radius: 8px; border: none; font-size: 16px; background: #222; color: #ffdd00; }
+    #top-bar button { padding: 8px 16px; background: #ffdd00; color: #000; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
+    .screen { background: #111; padding: 20px; border-radius: 16px; border: 1px solid #ffdd00; }
     .hidden { display: none !important; }
-    .btn {
-      padding: 10px 20px;
-      border: none;
-      border-radius: 10px;
-      font-size: 16px;
-      cursor: pointer;
-      font-weight: bold;
-      background: #ffdd00;
-      color: #000;
-      margin: 5px;
-    }
+    .btn { padding: 10px 20px; border: none; border-radius: 10px; font-size: 16px; cursor: pointer; font-weight: bold; background: #ffdd00; color: #000; margin: 5px; }
     .btn:hover { opacity: 0.8; }
     .btn-small { padding: 5px 12px; font-size: 14px; border-radius: 6px; }
     .btn-danger { background: #c0392b; color: white; }
     .btn-success { background: #27ae60; color: white; }
     .btn-warning { background: #e67e22; color: white; }
-    .input-field {
-      width: 100%;
-      padding: 10px;
-      border-radius: 8px;
-      border: none;
-      margin: 8px 0;
-      font-size: 16px;
-      background: #222;
-      color: #ffdd00;
-    }
+    .input-field { width: 100%; padding: 10px; border-radius: 8px; border: none; margin: 8px 0; font-size: 16px; background: #222; color: #ffdd00; }
     .player-list { list-style: none; margin: 15px 0; }
-    .player-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: #222;
-      padding: 8px 12px;
-      border-radius: 8px;
-      margin: 6px 0;
-    }
-    .badge {
-      background: #ffdd00;
-      color: #000;
-      padding: 2px 8px;
-      border-radius: 12px;
-      font-size: 12px;
-      margin-left: 8px;
-    }
-    .game-area {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 15px;
-    }
-    .play-field {
-      position: relative;
-      width: 100%;
-      height: 350px;
-      margin: 10px 0;
-    }
-    .center-pile {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 10px;
-    }
-    .discard-pile {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-    }
-    .card {
-      width: 60px;
-      height: 85px;
-      background: white;
-      border-radius: 8px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-weight: bold;
-      font-size: 18px;
-      color: black;
-      box-shadow: 2px 2px 6px rgba(255,255,0,0.5);
-      margin: 3px;
-      cursor: pointer;
-      position: relative;
-    }
+    .player-item { display: flex; justify-content: space-between; align-items: center; background: #222; padding: 8px 12px; border-radius: 8px; margin: 6px 0; }
+    .badge { background: #ffdd00; color: #000; padding: 2px 8px; border-radius: 12px; font-size: 12px; margin-left: 8px; }
+    .game-area { display: flex; flex-direction: column; align-items: center; gap: 15px; }
+    .play-field { position: relative; width: 100%; height: 350px; margin: 10px 0; }
+    .center-pile { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; gap: 10px; }
+    .discard-pile { display: flex; align-items: center; gap: 20px; }
+    .card { width: 60px; height: 85px; background: white; border-radius: 8px; display: flex; justify-content: center; align-items: center; font-weight: bold; font-size: 18px; color: black; box-shadow: 2px 2px 6px rgba(255,255,0,0.5); margin: 3px; cursor: pointer; position: relative; }
     .card.red { background: #e74c3c; color: white; }
     .card.blue { background: #3498db; color: white; }
     .card.green { background: #2ecc71; color: white; }
     .card.yellow { background: #f1c40f; color: black; }
     .card.wild { background: linear-gradient(135deg, red, blue, green, yellow); color: white; }
-    .card-back {
-      width: 40px;
-      height: 56px;
-      background: #000;
-      color: #ffdd00;
-      border: 2px solid #ffdd00;
-      border-radius: 6px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-weight: bold;
-      font-size: 12px;
-      cursor: default;
-      user-select: none;
-      margin: 1px;
-    }
-    .opponent-container {
-      position: absolute;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      pointer-events: none;
-      transform: translate(-50%, -50%);
-    }
-    .opponent-cards {
-      display: flex;
-      flex-direction: row;
-      justify-content: center;
-    }
-    .opponent-username {
-      font-size: 12px;
-      color: #ffdd00;
-      margin-top: 4px;
-      text-align: center;
-      max-width: 100px;
-      word-wrap: break-word;
-    }
-    .hand {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      max-width: 100%;
-      margin-top: 10px;
-    }
+    .card-back { width: 40px; height: 56px; background: #000; color: #ffdd00; border: 2px solid #ffdd00; border-radius: 6px; display: flex; justify-content: center; align-items: center; font-weight: bold; font-size: 12px; cursor: default; user-select: none; margin: 1px; }
+    .opponent-container { position: absolute; display: flex; flex-direction: column; align-items: center; pointer-events: none; transform: translate(-50%, -50%); }
+    .opponent-cards { display: flex; flex-direction: row; justify-content: center; }
+    .opponent-username { font-size: 12px; color: #ffdd00; margin-top: 4px; text-align: center; max-width: 100px; word-wrap: break-word; }
+    .hand { display: flex; flex-wrap: wrap; justify-content: center; max-width: 100%; margin-top: 10px; }
     .player-hand-label { font-size: 14px; margin-bottom: 5px; color: #ffdd00; }
     .turn-indicator { font-size: 18px; font-weight: bold; color: #ffdd00; }
-    #announcement {
-      font-size: 16px;
-      color: #fff;
-      background: #222;
-      padding: 6px 12px;
-      border-radius: 8px;
-      text-align: center;
-      min-height: 24px;
-    }
-    .stack-actions {
-      display: flex;
-      gap: 10px;
-      margin: 5px 0;
-    }
-    .video-overlay {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100vw; height: 100vh;
-      background: rgba(0,0,0,0.95);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 1000;
-    }
-    .video-overlay iframe {
-      width: 80vw;
-      height: 80vh;
-    }
-    .victory-splash {
-      position: fixed;
-      top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
-      font-size: 3em;
-      font-weight: bold;
-      text-align: center;
-      color: yellow;
-      animation: rainbow 2s infinite, pulse 1s infinite alternate;
-      text-shadow: 3px 3px 10px black;
-      z-index: 1001;
-    }
-    @keyframes rainbow {
-      0%{color:red} 16%{color:orange} 32%{color:yellow} 48%{color:green} 64%{color:blue} 80%{color:indigo} 100%{color:violet}
-    }
-    @keyframes pulse {
-      from { transform: translate(-50%, -50%) scale(1); }
-      to { transform: translate(-50%, -50%) scale(1.05); }
-    }
+    #announcement { font-size: 16px; color: #fff; background: #222; padding: 6px 12px; border-radius: 8px; text-align: center; min-height: 24px; }
+    .stack-actions { display: flex; gap: 10px; margin: 5px 0; }
+    .timer { font-size: 14px; color: #ffdd00; margin-top: 5px; }
+    .video-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.95); display: flex; align-items: center; justify-content: center; z-index: 1000; }
+    .video-overlay iframe { width: 80vw; height: 80vh; }
+    .victory-splash { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 3em; font-weight: bold; text-align: center; color: yellow; animation: rainbow 2s infinite, pulse 1s infinite alternate; text-shadow: 3px 3px 10px black; z-index: 1001; }
+    @keyframes rainbow { 0%{color:red} 16%{color:orange} 32%{color:yellow} 48%{color:green} 64%{color:blue} 80%{color:indigo} 100%{color:violet} }
+    @keyframes pulse { from { transform: translate(-50%, -50%) scale(1); } to { transform: translate(-50%, -50%) scale(1.05); } }
   </style>
 </head>
 <body>
@@ -263,10 +63,14 @@
     <div id="home-screen" class="screen">
       <button id="createLobbyBtn" class="btn">Create Lobby</button>
       <button id="joinLobbyBtn" class="btn">Join Lobby</button>
+      <button id="quickPlayBtn" class="btn">Quick Play</button>
       <div id="createForm" class="hidden" style="margin-top:15px;">
         <input type="text" id="lobbyNameInput" class="input-field" placeholder="Lobby name (empty = random)">
         <input type="password" id="lobbyPassCreate" class="input-field" placeholder="Password (optional)">
         <input type="number" id="maxPlayersInput" class="input-field" value="4" min="2" max="10" placeholder="Max players">
+        <label style="color:#ffdd00; display:flex; align-items:center; gap:5px;">
+          <input type="checkbox" id="publicCheckbox"> Public
+        </label>
         <button id="createConfirmBtn" class="btn btn-success">Create</button>
       </div>
       <div id="joinForm" class="hidden" style="margin-top:15px;">
@@ -280,11 +84,13 @@
       <p>Code: <strong id="lobbyCodeDisplay"></strong></p>
       <ul id="playerList" class="player-list"></ul>
       <div id="lobbyActions">
-        <!-- OP-only controls: hidden by default, shown only if player is OP -->
         <div id="lobbyOPActions" style="display:none;">
           <button id="startGameBtn" class="btn btn-warning">Start Game</button>
           <label style="color:#ffdd00; display:flex; align-items:center; gap:5px;">
             <input type="checkbox" id="foreverStackingCheck"> Forever Stacking
+          </label>
+          <label style="color:#ffdd00; display:flex; align-items:center; gap:5px;">
+            <input type="checkbox" id="quickRoundCheck"> Quick Round
           </label>
         </div>
         <button id="leaveLobbyBtn" class="btn btn-danger">Leave</button>
@@ -302,6 +108,7 @@
             <div id="announcement"></div>
           </div>
         </div>
+        <div class="timer" id="turnTimer"></div>
         <div class="stack-actions" id="stackActions"></div>
         <div class="player-hand-label">Your hand:</div>
         <div id="yourHand" class="hand"></div>
@@ -332,6 +139,7 @@
   let myPlayerId = sessionStorage.getItem("unoPlayerId") || generateId();
   let currentLobbyId = null;
   let lobbyChannel = null;
+  let turnTimerInterval = null;
 
   sessionStorage.setItem("unoPlayerId", myPlayerId);
   if (myUsername) {
@@ -351,6 +159,7 @@
     document.querySelectorAll(".screen").forEach(s => s.classList.add("hidden"));
   }
 
+  // UI MANAGEMENT
   document.getElementById("setUsernameBtn").addEventListener("click", () => {
     const name = document.getElementById("usernameInput").value.trim();
     if (!name) return alert("Enter a username.");
@@ -375,6 +184,7 @@
     const code = (document.getElementById("lobbyNameInput").value.trim() || generateCode()).toUpperCase();
     const pass = document.getElementById("lobbyPassCreate").value;
     const max = parseInt(document.getElementById("maxPlayersInput").value) || 4;
+    const isPublic = document.getElementById("publicCheckbox").checked;
     if (!myUsername) return alert("Set username first.");
     const passHash = pass ? await sha256(pass) : null;
     try {
@@ -383,6 +193,7 @@
         name: code,
         password_hash: passHash,
         max_players: max,
+        public: isPublic,
         players: { [myPlayerId]: { username: myUsername, isOP: true } }
       });
       if (error) throw error;
@@ -415,6 +226,27 @@
     joinLobby(code);
   });
 
+  document.getElementById("quickPlayBtn").addEventListener("click", async () => {
+    if (!myUsername) return alert("Set a username first.");
+    const { data: lobbies, error } = await supabase.from("lobbies")
+      .select("*")
+      .eq("public", true)
+      .eq("status", "waiting");
+    if (error || !lobbies || lobbies.length === 0) return alert("No public lobbies available.");
+    lobbies.sort((a, b) => Object.keys(a.players).length - Object.keys(b.players).length);
+    const lobby = lobbies[0];
+    if (Object.keys(lobby.players).length >= lobby.max_players) return alert("All public lobbies are full.");
+    if (lobby.password_hash) return alert("The selected public lobby has a password. Quick Play only joins password‑free lobbies.");
+    const players = { ...lobby.players };
+    players[myPlayerId] = { username: myUsername, isOP: false };
+    const { error: updateErr } = await supabase.from("lobbies").update({
+      players,
+      version: lobby.version + 1
+    }).eq("id", lobby.id).eq("version", lobby.version);
+    if (updateErr) return alert("Failed to join. Lobby may be full or changed.");
+    joinLobby(lobby.id);
+  });
+
   function joinLobby(code) {
     currentLobbyId = code;
     hideAllScreens();
@@ -428,12 +260,7 @@
     if (lobbyChannel) supabase.removeChannel(lobbyChannel);
     lobbyChannel = supabase
       .channel("lobby-" + currentLobbyId)
-      .on("postgres_changes", {
-        event: "*",
-        schema: "public",
-        table: "lobbies",
-        filter: `id=eq.${currentLobbyId}`
-      }, (payload) => {
+      .on("postgres_changes", { event: "*", schema: "public", table: "lobbies", filter: `id=eq.${currentLobbyId}` }, (payload) => {
         const newData = payload.new;
         if (!newData) { leaveLobby(); return alert("Lobby deleted."); }
         if (newData.status === "playing") {
@@ -444,7 +271,6 @@
         const myData = players[myPlayerId];
         if (!myData) { leaveLobby(); return alert("You were removed."); }
         const isOP = myData.isOP;
-        // Show/hide OP-only controls
         document.getElementById("lobbyOPActions").style.display = isOP ? "block" : "none";
         renderPlayerList(players, isOP);
       })
@@ -480,34 +306,43 @@
     const { data } = await supabase.from("lobbies").select("players,version").eq("id", currentLobbyId).single();
     if (!data) return;
     data.players[id] = { ...data.players[id], isOP: op };
-    await supabase.from("lobbies").update({
-      players: data.players,
-      version: data.version + 1
-    }).eq("id", currentLobbyId).eq("version", data.version);
+    await supabase.from("lobbies").update({ players: data.players, version: data.version + 1 }).eq("id", currentLobbyId).eq("version", data.version);
   }
 
   async function kickPlayer(id) {
     const { data } = await supabase.from("lobbies").select("players,version").eq("id", currentLobbyId).single();
     if (!data) return;
     delete data.players[id];
-    await supabase.from("lobbies").update({
-      players: data.players,
-      version: data.version + 1
-    }).eq("id", currentLobbyId).eq("version", data.version);
+    await supabase.from("lobbies").update({ players: data.players, version: data.version + 1 }).eq("id", currentLobbyId).eq("version", data.version);
+    if (Object.keys(data.players).length === 0) {
+      await supabase.from("lobbies").delete().eq("id", currentLobbyId);
+    }
   }
 
   document.getElementById("startGameBtn").addEventListener("click", async () => {
     const foreverStacking = document.getElementById("foreverStackingCheck").checked;
+    const quickRound = document.getElementById("quickRoundCheck").checked;
     const { data: lobby, error } = await supabase.from("lobbies").select("*").eq("id", currentLobbyId).single();
     if (error || !lobby || lobby.status !== "waiting") return alert("Cannot start.");
     const players = lobby.players;
     const ids = Object.keys(players);
     if (ids.length < 2) return alert("Need at least 2 players.");
-    let deck = createDeck();
+    let deck = createDeck(quickRound);
     shuffle(deck);
     let hands = {};
     ids.forEach(id => hands[id] = []);
-    for(let i=0;i<7;i++) ids.forEach(id => hands[id].push(deck.pop()));
+    const cardsPerPlayer = quickRound ? 4 : 7;
+    for (let i = 0; i < cardsPerPlayer; i++) {
+      ids.forEach(id => {
+        let card = deck.pop();
+        while (card && (card.value === "wild" || card.value === "wild4" || card.value === "draw2")) {
+          deck.unshift(card);
+          shuffle(deck);
+          card = deck.pop();
+        }
+        hands[id].push(card);
+      });
+    }
     let discard = [];
     while(deck.length && (deck[deck.length-1].color==="wild" || deck[deck.length-1].value==="wild4")) {
       discard.push(deck.pop());
@@ -531,10 +366,11 @@
     const gameState = {
       deck, discard, hands, turnOrder, currentPlayerIndex: currentIdx,
       direction, chosenColor, winner: null, unoVulnerable: null,
-      drawStackCount: 0, drawStackType: null, foreverStacking,
-      announcement: "",
-      gameOver: false
+      drawStackCount: 0, drawStackType: null, foreverStacking, quickRound,
+      announcement: "", gameOver: false,
+      timeoutCounts: {}
     };
+    ids.forEach(id => gameState.timeoutCounts[id] = 0);
     const { error: updateErr } = await supabase.from("lobbies").update({
       status: "playing",
       game_state: gameState,
@@ -544,19 +380,24 @@
   });
 
   document.getElementById("leaveLobbyBtn").addEventListener("click", leaveLobby);
-  function leaveLobby() {
+  async function leaveLobby() {
     if (currentLobbyId && myPlayerId) {
-      supabase.from("lobbies").select("players,version").eq("id", currentLobbyId).single().then(({ data }) => {
-        if (data && data.players[myPlayerId]) {
-          delete data.players[myPlayerId];
-          supabase.from("lobbies").update({
-            players: data.players,
+      const { data } = await supabase.from("lobbies").select("players,version").eq("id", currentLobbyId).single();
+      if (data && data.players[myPlayerId]) {
+        const newPlayers = { ...data.players };
+        delete newPlayers[myPlayerId];
+        if (Object.keys(newPlayers).length === 0) {
+          await supabase.from("lobbies").delete().eq("id", currentLobbyId);
+        } else {
+          await supabase.from("lobbies").update({
+            players: newPlayers,
             version: data.version + 1
-          }).eq("id", currentLobbyId).eq("version", data.version).then(() => {});
+          }).eq("id", currentLobbyId).eq("version", data.version);
         }
-      });
+      }
     }
     if (lobbyChannel) supabase.removeChannel(lobbyChannel);
+    if (turnTimerInterval) clearInterval(turnTimerInterval);
     currentLobbyId = null;
     hideAllScreens();
     document.getElementById("home-screen").classList.remove("hidden");
@@ -564,7 +405,7 @@
 
   // ---------- GAME LOGIC ----------
   const COLORS = ["red","blue","green","yellow"];
-  function createDeck() {
+  function createDeck(quickRound = false) {
     let deck = [];
     COLORS.forEach(color => {
       deck.push({ color, value: "0" });
@@ -572,6 +413,14 @@
       ["skip","reverse","draw2"].forEach(v => { deck.push({ color, value: v }); deck.push({ color, value: v }); });
     });
     for(let i=0;i<4;i++) { deck.push({ color:"wild", value:"wild" }); deck.push({ color:"wild", value:"wild4" }); }
+    if (quickRound) {
+      deck = deck.filter(c => {
+        if (c.value === "draw2" || c.value === "wild4") return Math.random() < 0.5;
+        return true;
+      });
+      while (deck.filter(c => c.value==="draw2").length < 2) deck.push({color:"red",value:"draw2"});
+      while (deck.filter(c => c.value==="wild4").length < 2) deck.push({color:"wild",value:"wild4"});
+    }
     return deck;
   }
   function shuffle(arr) { for(let i=arr.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]]; } }
@@ -606,6 +455,317 @@
     renderGame(data.game_state, data.players);
   }
 
+  function startTurnTimer() {
+    if (turnTimerInterval) clearInterval(turnTimerInterval);
+    const timerEl = document.getElementById("turnTimer");
+    let remaining = 150;
+    timerEl.textContent = formatTime(remaining);
+    turnTimerInterval = setInterval(() => {
+      remaining--;
+      timerEl.textContent = formatTime(remaining);
+      if (remaining <= 0) {
+        clearInterval(turnTimerInterval);
+        handleTimeout();
+      }
+    }, 1000);
+  }
+
+  function formatTime(secs) {
+    const mins = Math.floor(secs / 60);
+    const s = secs % 60;
+    return `${mins}:${s.toString().padStart(2, '0')}`;
+  }
+
+  async function handleTimeout() {
+    const { data } = await supabase.from("lobbies").select("game_state,version").eq("id", currentLobbyId).single();
+    if (!data || !data.game_state) return;
+    let gs = data.game_state;
+    if (gs.gameOver) return;
+    const currentPlayerId = gs.turnOrder[gs.currentPlayerIndex];
+    if (currentPlayerId !== myPlayerId) return;
+    gs.timeoutCounts[currentPlayerId] = (gs.timeoutCounts[currentPlayerId] || 0) + 1;
+    const myHand = gs.hands[currentPlayerId];
+    const topCard = gs.discard[gs.discard.length-1];
+    const playableCards = myHand.filter(c => canPlay(c, topCard, gs.chosenColor));
+    if (playableCards.length > 0) {
+      const randomCard = playableCards[Math.floor(Math.random() * playableCards.length)];
+      const index = myHand.indexOf(randomCard);
+      myHand.splice(index, 1);
+      gs.discard.push(randomCard);
+      if (randomCard.color === "wild" || randomCard.value === "wild4") {
+        const newColor = COLORS[Math.floor(Math.random() * COLORS.length)];
+        gs.chosenColor = newColor;
+        gs.announcement = `${myUsername} timed out. Wild ${randomCard.value==="wild4"?"+4":""} wishes for ${newColor}`;
+      } else {
+        gs.chosenColor = randomCard.color;
+        gs.announcement = `${myUsername} timed out. Played ${cardDisplay(randomCard)}.`;
+      }
+      applyCardEffect(gs, randomCard);
+    } else {
+      if (gs.deck.length === 0) {
+        gs.deck = gs.discard.splice(0, gs.discard.length-1);
+        shuffle(gs.deck);
+      }
+      myHand.push(gs.deck.pop());
+      gs.announcement = `${myUsername} timed out and drew a card.`;
+      gs.currentPlayerIndex = (gs.currentPlayerIndex + gs.direction + gs.turnOrder.length) % gs.turnOrder.length;
+    }
+    if (gs.timeoutCounts[currentPlayerId] >= 3) {
+      const players = (await supabase.from("lobbies").select("players,version").eq("id", currentLobbyId).single()).data?.players || {};
+      delete players[currentPlayerId];
+      await supabase.from("lobbies").update({
+        players,
+        version: data.version + 1
+      }).eq("id", currentLobbyId).eq("version", data.version);
+      gs.announcement = `${myUsername} was kicked for inactivity.`;
+    }
+    gs.unoVulnerable = null;
+    await supabase.from("lobbies").update({
+      game_state: gs,
+      version: data.version + 1
+    }).eq("id", currentLobbyId).eq("version", data.version);
+  }
+
+  function applyCardEffect(gs, card) {
+    const dir = gs.direction;
+    const order = gs.turnOrder;
+    let idx = gs.currentPlayerIndex;
+    if (card.value === "draw2" || card.value === "wild4") {
+      const amount = card.value === "wild4" ? 4 : 2;
+      const nextIdx = (idx + dir + order.length) % order.length;
+      const nextId = order[nextIdx];
+      for (let i=0; i<amount; i++) {
+        if (gs.deck.length === 0) {
+          gs.deck = gs.discard.splice(0, gs.discard.length-1);
+          shuffle(gs.deck);
+        }
+        gs.hands[nextId].push(gs.deck.pop());
+      }
+      idx = (nextIdx + dir + order.length) % order.length;
+      gs.currentPlayerIndex = idx;
+    } else if (card.value === "skip") {
+      idx = (idx + dir + order.length) % order.length;
+      idx = (idx + dir + order.length) % order.length;
+      gs.currentPlayerIndex = idx;
+    } else if (card.value === "reverse") {
+      if (order.length === 2) {
+        idx = (idx + dir*2 + order.length) % order.length;
+        gs.currentPlayerIndex = idx;
+      } else {
+        gs.direction = -dir;
+        idx = (idx + gs.direction + order.length) % order.length;
+        gs.currentPlayerIndex = idx;
+      }
+    } else {
+      idx = (idx + dir + order.length) % order.length;
+      gs.currentPlayerIndex = idx;
+    }
+  }
+
+  async function playCard(index) {
+    const { data } = await supabase.from("lobbies").select("game_state,version").eq("id", currentLobbyId).single();
+    if (!data || !data.game_state) return;
+    let gs = data.game_state;
+    if (gs.gameOver) return;
+    const myHand = gs.hands[myPlayerId] || [];
+    if (index < 0 || index >= myHand.length) return;
+    const card = myHand[index];
+    const topCard = gs.discard[gs.discard.length-1];
+    if (!canPlay(card, topCard, gs.chosenColor)) return alert("Can't play that card.");
+    myHand.splice(index, 1);
+    gs.discard.push(card);
+    if (card.color === "wild" || card.value === "wild4") {
+      const newColor = prompt("Choose color: red, blue, green, yellow")?.toLowerCase();
+      if (!COLORS.includes(newColor)) return;
+      gs.chosenColor = newColor;
+      gs.announcement = `${myUsername} played Wild ${card.value==="wild4"?"+4":""} and wishes for ${newColor}`;
+    } else {
+      gs.chosenColor = card.color;
+    }
+    if (myHand.length === 1) {
+      if (!gs.unoVulnerable) gs.unoVulnerable = myPlayerId;
+    }
+    applyCardEffect(gs, card);
+    gs.unoVulnerable = null;
+    if (myHand.length === 0) gs.winner = myPlayerId;
+    gs.timeoutCounts[myPlayerId] = 0;
+    await supabase.from("lobbies").update({
+      game_state: gs,
+      version: data.version + 1
+    }).eq("id", currentLobbyId).eq("version", data.version);
+  }
+
+  async function drawCard() {
+    const { data } = await supabase.from("lobbies").select("game_state,version").eq("id", currentLobbyId).single();
+    if (!data || !data.game_state) return;
+    let gs = data.game_state;
+    if (gs.gameOver) return;
+    const myHand = gs.hands[myPlayerId];
+    if (gs.deck.length === 0) {
+      gs.deck = gs.discard.splice(0, gs.discard.length-1);
+      shuffle(gs.deck);
+    }
+    const drawn = gs.deck.pop();
+    myHand.push(drawn);
+    gs.announcement = `${myUsername} drew a card`;
+    const topCard = gs.discard[gs.discard.length-1];
+    if (canPlay(drawn, topCard, gs.chosenColor)) {
+      const play = confirm(`You drew ${cardDisplay(drawn)}. Play it?`);
+      if (play) {
+        const cardIdx = myHand.length-1;
+        myHand.splice(cardIdx, 1);
+        gs.discard.push(drawn);
+        if (drawn.color === "wild" || drawn.value === "wild4") {
+          const newColor = prompt("Choose color: red, blue, green, yellow")?.toLowerCase();
+          if (!COLORS.includes(newColor)) return;
+          gs.chosenColor = newColor;
+          gs.announcement = `${myUsername} played drawn Wild ${drawn.value==="wild4"?"+4":""} and wishes for ${newColor}`;
+        } else {
+          gs.chosenColor = drawn.color;
+        }
+        if (myHand.length === 1) gs.unoVulnerable = myPlayerId;
+        applyCardEffect(gs, drawn);
+        gs.unoVulnerable = null;
+        if (myHand.length === 0) gs.winner = myPlayerId;
+        gs.timeoutCounts[myPlayerId] = 0;
+        await supabase.from("lobbies").update({
+          game_state: gs,
+          version: data.version + 1
+        }).eq("id", currentLobbyId).eq("version", data.version);
+        return;
+      }
+    }
+    gs.currentPlayerIndex = (gs.currentPlayerIndex + gs.direction + gs.turnOrder.length) % gs.turnOrder.length;
+    gs.unoVulnerable = null;
+    gs.timeoutCounts[myPlayerId] = 0;
+    await supabase.from("lobbies").update({
+      game_state: gs,
+      version: data.version + 1
+    }).eq("id", currentLobbyId).eq("version", data.version);
+  }
+
+  async function autoDraw() {
+    const { data } = await supabase.from("lobbies").select("game_state,version").eq("id", currentLobbyId).single();
+    if (!data || !data.game_state) return;
+    let gs = data.game_state;
+    if (gs.gameOver) return;
+    if (gs.turnOrder[gs.currentPlayerIndex] !== myPlayerId) return;
+    const top = gs.discard[gs.discard.length-1];
+    if (gs.hands[myPlayerId].some(c => canPlay(c, top, gs.chosenColor))) return;
+    if (gs.deck.length === 0) {
+      gs.deck = gs.discard.splice(0, gs.discard.length-1);
+      shuffle(gs.deck);
+    }
+    gs.hands[myPlayerId].push(gs.deck.pop());
+    gs.announcement = `${myUsername} had to draw a card`;
+    gs.currentPlayerIndex = (gs.currentPlayerIndex + gs.direction + gs.turnOrder.length) % gs.turnOrder.length;
+    gs.unoVulnerable = null;
+    await supabase.from("lobbies").update({
+      game_state: gs,
+      version: data.version + 1
+    }).eq("id", currentLobbyId).eq("version", data.version);
+  }
+
+  // Stacking functions with timeout reset
+  async function attemptStack(card, index) {
+    const { data } = await supabase.from("lobbies").select("game_state,version").eq("id", currentLobbyId).single();
+    if (!data || !data.game_state) return;
+    const gs = data.game_state;
+    if (gs.drawStackCount <= 0) return;
+    const myHand = gs.hands[myPlayerId];
+    const cardObj = myHand[index];
+    const canStack = (gs.drawStackType === 2 && cardObj.value === "draw2") ||
+                     (gs.drawStackType === 4 && cardObj.value === "wild4") ||
+                     (gs.foreverStacking && (cardObj.value === "draw2" || cardObj.value === "wild4"));
+    if (!canStack) return alert("You can only stack with a matching draw card (or any if forever stacking).");
+    myHand.splice(index, 1);
+    gs.discard.push(cardObj);
+    if (cardObj.color === "wild" || cardObj.value === "wild4") {
+      const newColor = prompt("Choose color: red, blue, green, yellow")?.toLowerCase();
+      if (!COLORS.includes(newColor)) return;
+      gs.chosenColor = newColor;
+      gs.announcement = `${myUsername} stacked a +${cardObj.value==="wild4"?"4":"2"} and wishes for ${newColor}. Total: +${gs.drawStackCount + (cardObj.value==="wild4"?4:2)}`;
+    } else {
+      gs.chosenColor = cardObj.color;
+      gs.announcement = `${myUsername} stacked a +2. Total: +${gs.drawStackCount + 2}`;
+    }
+    gs.drawStackCount += (cardObj.value === "wild4") ? 4 : 2;
+    gs.drawStackType = cardObj.value === "wild4" ? 4 : 2;
+    const dir = gs.direction;
+    const order = gs.turnOrder;
+    let idx = gs.currentPlayerIndex;
+    idx = (idx + dir + order.length) % order.length;
+    gs.currentPlayerIndex = idx;
+    gs.timeoutCounts[myPlayerId] = 0;
+    await supabase.from("lobbies").update({
+      game_state: gs,
+      version: data.version + 1
+    }).eq("id", currentLobbyId).eq("version", data.version);
+  }
+
+  async function takeCards() {
+    const { data } = await supabase.from("lobbies").select("game_state,version").eq("id", currentLobbyId).single();
+    if (!data || !data.game_state) return;
+    let gs = data.game_state;
+    const count = gs.drawStackCount;
+    for (let i=0; i<count; i++) {
+      if (gs.deck.length === 0) {
+        gs.deck = gs.discard.splice(0, gs.discard.length-1);
+        shuffle(gs.deck);
+      }
+      gs.hands[myPlayerId].push(gs.deck.pop());
+    }
+    gs.drawStackCount = 0;
+    gs.drawStackType = null;
+    const dir = gs.direction;
+    const order = gs.turnOrder;
+    let idx = gs.currentPlayerIndex;
+    idx = (idx + dir + order.length) % order.length;
+    gs.currentPlayerIndex = idx;
+    gs.announcement = `${myUsername} took +${count} cards`;
+    gs.timeoutCounts[myPlayerId] = 0;
+    await supabase.from("lobbies").update({
+      game_state: gs,
+      version: data.version + 1
+    }).eq("id", currentLobbyId).eq("version", data.version);
+  }
+
+  async function callUno() {
+    await updateGameState({ unoVulnerable: null, announcement: `${myUsername} calls UNO!` });
+  }
+
+  async function catchUno() {
+    const { data } = await supabase.from("lobbies").select("game_state,version").eq("id", currentLobbyId).single();
+    if (!data || !data.game_state) return;
+    let gs = data.game_state;
+    if (gs.unoVulnerable) {
+      for (let i=0; i<2; i++) {
+        if (gs.deck.length === 0) {
+          gs.deck = gs.discard.splice(0, gs.discard.length-1);
+          shuffle(gs.deck);
+        }
+        gs.hands[gs.unoVulnerable].push(gs.deck.pop());
+      }
+      const players = (await supabase.from("lobbies").select("players").eq("id", currentLobbyId).single()).data?.players || {};
+      gs.announcement = `${players[gs.unoVulnerable]?.username} caught without UNO! +2 cards`;
+      gs.unoVulnerable = null;
+      await supabase.from("lobbies").update({
+        game_state: gs,
+        version: data.version + 1
+      }).eq("id", currentLobbyId).eq("version", data.version);
+    }
+  }
+
+  async function updateGameState(partial) {
+    const { data } = await supabase.from("lobbies").select("game_state,version").eq("id", currentLobbyId).single();
+    if (!data) return;
+    const newGS = { ...data.game_state, ...partial };
+    await supabase.from("lobbies").update({
+      game_state: newGS,
+      version: data.version + 1
+    }).eq("id", currentLobbyId).eq("version", data.version);
+  }
+
   function renderGame(gs, players) {
     if (!gs) return;
     const myHand = gs.hands[myPlayerId] || [];
@@ -624,7 +784,6 @@
     deckEl.onclick = (isMyTurn && !gs.gameOver && drawStackCount === 0) ? () => drawCard() : null;
     deckEl.style.cursor = (isMyTurn && !gs.gameOver && drawStackCount === 0) ? "pointer" : "default";
 
-    // Render opponents around the center
     const playField = document.getElementById("playField");
     playField.querySelectorAll('.opponent-container').forEach(el => el.remove());
     const opponentIds = gs.turnOrder.filter(id => id !== myPlayerId);
@@ -701,13 +860,17 @@
 
     document.getElementById("announcement").textContent = gs.announcement || "";
 
-    // Auto-draw if no playable cards and it's my turn (not stacking)
-    if (isMyTurn && !gs.gameOver && drawStackCount === 0 && myHand.length > 0) {
+    if (isMyTurn && !gs.gameOver && drawStackCount === 0) {
+      if (myHand.length === 0) return;
       const top = gs.discard[gs.discard.length-1];
-      const playable = myHand.some(c => canPlay(c, top, gs.chosenColor));
-      if (!playable) {
+      if (!myHand.some(c => canPlay(c, top, gs.chosenColor))) {
         setTimeout(() => autoDraw(), 100);
+        return;
       }
+      startTurnTimer();
+    } else {
+      if (turnTimerInterval) clearInterval(turnTimerInterval);
+      document.getElementById("turnTimer").textContent = "";
     }
 
     if (gs.winner && !gs.gameOver) {
@@ -740,262 +903,6 @@
     }, 8000);
   }
 
-  async function updateGameState(partial) {
-    const { data } = await supabase.from("lobbies").select("game_state,version").eq("id", currentLobbyId).single();
-    if (!data) return;
-    const newGS = { ...data.game_state, ...partial };
-    await supabase.from("lobbies").update({
-      game_state: newGS,
-      version: data.version + 1
-    }).eq("id", currentLobbyId).eq("version", data.version);
-  }
-
-  async function attemptStack(card, index) {
-    const { data } = await supabase.from("lobbies").select("game_state,version").eq("id", currentLobbyId).single();
-    if (!data || !data.game_state) return;
-    const gs = data.game_state;
-    if (gs.drawStackCount <= 0) return;
-    const myHand = gs.hands[myPlayerId];
-    const cardObj = myHand[index];
-    const canStack = (gs.drawStackType === 2 && cardObj.value === "draw2") ||
-                     (gs.drawStackType === 4 && cardObj.value === "wild4") ||
-                     (gs.foreverStacking && (cardObj.value === "draw2" || cardObj.value === "wild4"));
-    if (!canStack) return alert("You can only stack with a matching draw card (or any if forever stacking).");
-    myHand.splice(index, 1);
-    gs.discard.push(cardObj);
-    if (cardObj.color === "wild" || cardObj.value === "wild4") {
-      const newColor = prompt("Choose color: red, blue, green, yellow")?.toLowerCase();
-      if (!COLORS.includes(newColor)) return;
-      gs.chosenColor = newColor;
-      gs.announcement = `${myUsername} stacked a +${cardObj.value==="wild4"?"4":"2"} and wishes for ${newColor}. Total: +${gs.drawStackCount + (cardObj.value==="wild4"?4:2)}`;
-    } else {
-      gs.chosenColor = cardObj.color;
-      gs.announcement = `${myUsername} stacked a +2. Total: +${gs.drawStackCount + 2}`;
-    }
-    gs.drawStackCount += (cardObj.value === "wild4") ? 4 : 2;
-    gs.drawStackType = cardObj.value === "wild4" ? 4 : 2;
-    const dir = gs.direction;
-    const order = gs.turnOrder;
-    let idx = gs.currentPlayerIndex;
-    idx = (idx + dir + order.length) % order.length;
-    gs.currentPlayerIndex = idx;
-    await supabase.from("lobbies").update({
-      game_state: gs,
-      version: data.version + 1
-    }).eq("id", currentLobbyId).eq("version", data.version);
-  }
-
-  async function takeCards() {
-    const { data } = await supabase.from("lobbies").select("game_state,version").eq("id", currentLobbyId).single();
-    if (!data || !data.game_state) return;
-    let gs = data.game_state;
-    const count = gs.drawStackCount;
-    for (let i=0; i<count; i++) {
-      if (gs.deck.length === 0) {
-        gs.deck = gs.discard.splice(0, gs.discard.length-1);
-        shuffle(gs.deck);
-      }
-      gs.hands[myPlayerId].push(gs.deck.pop());
-    }
-    gs.drawStackCount = 0;
-    gs.drawStackType = null;
-    const dir = gs.direction;
-    const order = gs.turnOrder;
-    let idx = gs.currentPlayerIndex;
-    idx = (idx + dir + order.length) % order.length;
-    gs.currentPlayerIndex = idx;
-    gs.announcement = `${myUsername} took +${count} cards`;
-    await supabase.from("lobbies").update({
-      game_state: gs,
-      version: data.version + 1
-    }).eq("id", currentLobbyId).eq("version", data.version);
-  }
-
-  async function playCard(index) {
-    const { data } = await supabase.from("lobbies").select("game_state,version").eq("id", currentLobbyId).single();
-    if (!data || !data.game_state) return;
-    let gs = data.game_state;
-    if (gs.gameOver) return;
-    const myHand = gs.hands[myPlayerId] || [];
-    if (index < 0 || index >= myHand.length) return;
-    const card = myHand[index];
-    const topCard = gs.discard[gs.discard.length-1];
-    if (!canPlay(card, topCard, gs.chosenColor)) return alert("Can't play that card.");
-    myHand.splice(index, 1);
-    gs.discard.push(card);
-    if (card.color === "wild" || card.value === "wild4") {
-      const newColor = prompt("Choose color: red, blue, green, yellow")?.toLowerCase();
-      if (!COLORS.includes(newColor)) return;
-      gs.chosenColor = newColor;
-      if (card.value === "wild4") {
-        gs.announcement = `${myUsername} played Wild +4 and wishes for ${newColor}`;
-      } else {
-        gs.announcement = `${myUsername} played Wild and wishes for ${newColor}`;
-      }
-    } else {
-      gs.chosenColor = card.color;
-    }
-    const dir = gs.direction;
-    const order = gs.turnOrder;
-    let idx = gs.currentPlayerIndex;
-    if (myHand.length === 1) {
-      if (!gs.unoVulnerable) gs.unoVulnerable = myPlayerId;
-    }
-    if (card.value === "draw2" || card.value === "wild4") {
-      gs.drawStackCount = (card.value === "wild4") ? 4 : 2;
-      gs.drawStackType = card.value === "wild4" ? 4 : 2;
-      idx = (idx + dir + order.length) % order.length;
-      gs.currentPlayerIndex = idx;
-      if (!gs.announcement) gs.announcement = `${myUsername} played +${gs.drawStackCount}`;
-    } else if (card.value === "reverse") {
-      if (order.length === 2) {
-        idx = (idx + dir + order.length) % order.length;
-        gs.currentPlayerIndex = idx;
-        gs.announcement = `${myUsername} played Reverse (skip)`;
-      } else {
-        gs.direction = -dir;
-        idx = (idx + gs.direction + order.length) % order.length;
-        gs.currentPlayerIndex = idx;
-      }
-    } else if (card.value === "skip") {
-      idx = (idx + dir + order.length) % order.length;
-      gs.currentPlayerIndex = idx;
-    } else {
-      idx = (idx + dir + order.length) % order.length;
-      gs.currentPlayerIndex = idx;
-    }
-    gs.unoVulnerable = null;
-    if (myHand.length === 0) gs.winner = myPlayerId;
-    await supabase.from("lobbies").update({
-      game_state: gs,
-      version: data.version + 1
-    }).eq("id", currentLobbyId).eq("version", data.version);
-  }
-
-  async function drawCard() {
-    const { data } = await supabase.from("lobbies").select("game_state,version").eq("id", currentLobbyId).single();
-    if (!data || !data.game_state) return;
-    let gs = data.game_state;
-    if (gs.gameOver) return;
-    const myHand = gs.hands[myPlayerId];
-    if (gs.deck.length === 0) {
-      gs.deck = gs.discard.splice(0, gs.discard.length-1);
-      shuffle(gs.deck);
-    }
-    const drawn = gs.deck.pop();
-    myHand.push(drawn);
-    gs.announcement = `${myUsername} drew a card`;
-    const topCard = gs.discard[gs.discard.length-1];
-    if (canPlay(drawn, topCard, gs.chosenColor)) {
-      const play = confirm(`You drew ${cardDisplay(drawn)}. Play it?`);
-      if (play) {
-        const cardIdx = myHand.length-1;
-        myHand.splice(cardIdx, 1);
-        gs.discard.push(drawn);
-        if (drawn.color === "wild" || drawn.value === "wild4") {
-          const newColor = prompt("Choose color: red, blue, green, yellow")?.toLowerCase();
-          if (!COLORS.includes(newColor)) return;
-          gs.chosenColor = newColor;
-          if (drawn.value === "wild4") {
-            gs.announcement = `${myUsername} played drawn Wild +4 and wishes for ${newColor}`;
-          } else {
-            gs.announcement = `${myUsername} played drawn Wild and wishes for ${newColor}`;
-          }
-        } else {
-          gs.chosenColor = drawn.color;
-        }
-        const dir = gs.direction;
-        const order = gs.turnOrder;
-        let turnIdx = gs.currentPlayerIndex;
-        if (myHand.length === 1) gs.unoVulnerable = myPlayerId;
-        if (drawn.value === "draw2" || drawn.value === "wild4") {
-          gs.drawStackCount = (drawn.value === "wild4") ? 4 : 2;
-          gs.drawStackType = drawn.value === "wild4" ? 4 : 2;
-          turnIdx = (turnIdx + dir + order.length) % order.length;
-          gs.currentPlayerIndex = turnIdx;
-        } else if (drawn.value === "reverse") {
-          if (order.length === 2) {
-            turnIdx = (turnIdx + dir + order.length) % order.length;
-            gs.currentPlayerIndex = turnIdx;
-          } else {
-            gs.direction = -dir;
-            turnIdx = (turnIdx + gs.direction + order.length) % order.length;
-            gs.currentPlayerIndex = turnIdx;
-          }
-        } else if (drawn.value === "skip") {
-          turnIdx = (turnIdx + dir + order.length) % order.length;
-          gs.currentPlayerIndex = turnIdx;
-        } else {
-          turnIdx = (turnIdx + dir + order.length) % order.length;
-          gs.currentPlayerIndex = turnIdx;
-        }
-        gs.unoVulnerable = null;
-        if (myHand.length === 0) gs.winner = myPlayerId;
-        await supabase.from("lobbies").update({
-          game_state: gs,
-          version: data.version + 1
-        }).eq("id", currentLobbyId).eq("version", data.version);
-        return;
-      }
-    }
-    gs.currentPlayerIndex = (gs.currentPlayerIndex + gs.direction + gs.turnOrder.length) % gs.turnOrder.length;
-    gs.unoVulnerable = null;
-    await supabase.from("lobbies").update({
-      game_state: gs,
-      version: data.version + 1
-    }).eq("id", currentLobbyId).eq("version", data.version);
-  }
-
-  async function autoDraw() {
-    const { data } = await supabase.from("lobbies").select("game_state,version").eq("id", currentLobbyId).single();
-    if (!data || !data.game_state) return;
-    let gs = data.game_state;
-    if (gs.gameOver) return;
-    const myHand = gs.hands[myPlayerId];
-    if (gs.turnOrder[gs.currentPlayerIndex] !== myPlayerId) return;
-    const top = gs.discard[gs.discard.length-1];
-    if (myHand.some(c => canPlay(c, top, gs.chosenColor))) return;
-    if (gs.deck.length === 0) {
-      gs.deck = gs.discard.splice(0, gs.discard.length-1);
-      shuffle(gs.deck);
-    }
-    const drawn = gs.deck.pop();
-    myHand.push(drawn);
-    gs.announcement = `${myUsername} had to draw a card`;
-    gs.currentPlayerIndex = (gs.currentPlayerIndex + gs.direction + gs.turnOrder.length) % gs.turnOrder.length;
-    gs.unoVulnerable = null;
-    await supabase.from("lobbies").update({
-      game_state: gs,
-      version: data.version + 1
-    }).eq("id", currentLobbyId).eq("version", data.version);
-  }
-
-  async function callUno() {
-    await updateGameState({ unoVulnerable: null, announcement: `${myUsername} calls UNO!` });
-  }
-
-  async function catchUno() {
-    const { data } = await supabase.from("lobbies").select("game_state,version").eq("id", currentLobbyId).single();
-    if (!data || !data.game_state) return;
-    let gs = data.game_state;
-    if (gs.unoVulnerable) {
-      for (let i=0; i<2; i++) {
-        if (gs.deck.length === 0) {
-          gs.deck = gs.discard.splice(0, gs.discard.length-1);
-          shuffle(gs.deck);
-        }
-        gs.hands[gs.unoVulnerable].push(gs.deck.pop());
-      }
-      const players = (await supabase.from("lobbies").select("players").eq("id", currentLobbyId).single()).data?.players || {};
-      gs.announcement = `${players[gs.unoVulnerable]?.username} caught without UNO! +2 cards`;
-      gs.unoVulnerable = null;
-      await supabase.from("lobbies").update({
-        game_state: gs,
-        version: data.version + 1
-      }).eq("id", currentLobbyId).eq("version", data.version);
-    }
-  }
-
   document.getElementById("leaveGameBtn").addEventListener("click", leaveLobby);
 
   supabase
@@ -1009,4 +916,3 @@
 </script>
 </body>
 </html>
-
