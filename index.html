@@ -69,6 +69,12 @@
         <input type="password" id="lobbyPassCreate" class="input-field" placeholder="Password (optional)">
         <input type="number" id="maxPlayersInput" class="input-field" value="4" min="2" max="10" placeholder="Max players">
         <label style="color:#ffdd00; display:flex; align-items:center; gap:5px;">
+          <input type="checkbox" id="foreverStackingCheck"> Forever Stacking
+        </label>
+        <label style="color:#ffdd00; display:flex; align-items:center; gap:5px;">
+          <input type="checkbox" id="quickRoundCheck"> Quick Round
+        </label>
+        <label style="color:#ffdd00; display:flex; align-items:center; gap:5px;">
           <input type="checkbox" id="publicCheckbox"> Public
         </label>
         <button id="createConfirmBtn" class="btn btn-success">Create</button>
@@ -86,12 +92,6 @@
       <div id="lobbyActions">
         <div id="lobbyOPActions" style="display:none;">
           <button id="startGameBtn" class="btn btn-warning">Start Game</button>
-          <label style="color:#ffdd00; display:flex; align-items:center; gap:5px;">
-            <input type="checkbox" id="foreverStackingCheck"> Forever Stacking
-          </label>
-          <label style="color:#ffdd00; display:flex; align-items:center; gap:5px;">
-            <input type="checkbox" id="quickRoundCheck"> Quick Round
-          </label>
         </div>
         <button id="leaveLobbyBtn" class="btn btn-danger">Leave</button>
       </div>
@@ -320,6 +320,7 @@
   }
 
   document.getElementById("startGameBtn").addEventListener("click", async () => {
+    // The Forever Stacking and Quick Round values are taken from the creation form (they are already set by OP)
     const foreverStacking = document.getElementById("foreverStackingCheck").checked;
     const quickRound = document.getElementById("quickRoundCheck").checked;
     const { data: lobby, error } = await supabase.from("lobbies").select("*").eq("id", currentLobbyId).single();
@@ -666,6 +667,7 @@
     }).eq("id", currentLobbyId).eq("version", data.version);
   }
 
+  // Stacking functions with timeout reset
   async function attemptStack(card, index) {
     const { data } = await supabase.from("lobbies").select("game_state,version").eq("id", currentLobbyId).single();
     if (!data || !data.game_state) return;
