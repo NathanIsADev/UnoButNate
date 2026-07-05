@@ -90,7 +90,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-  // ⚠️ REPLACE THESE WITH YOUR SUPABASE CREDENTIALS
+  // ✅ Your Supabase credentials
   const SUPABASE_URL = "https://ftpsgzwmafbdxuvtutrr.supabase.co";
   const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ0cHNnendtYWZiZHh1dnR1dHJyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMxOTg3ODMsImV4cCI6MjA5ODc3NDc4M30.Vlr5FP1HnYjyS35mz5XT7h8eM1Y3sNOHo1odqI3_S2U";
 
@@ -183,7 +183,6 @@
     if (containsSlur(myUsername)) return alert("Username contains slur.");
     const existingNames = Object.values(players).map(p => p.username);
     if (existingNames.includes(myUsername)) return alert("Username taken in this lobby.");
-    // add self to players
     players[myPlayerId] = { username: myUsername, isOP: false };
     const { error: updateErr } = await supabase.from("lobbies").update({
       players,
@@ -293,7 +292,7 @@
     document.getElementById("home-screen").classList.remove("hidden");
   }
 
-  // ---------- GAME LOGIC (same Uno rules) ----------
+  // ---------- GAME LOGIC ----------
   const COLORS = ["red","blue","green","yellow"];
   const VALUES = ["0","1","2","3","4","5","6","7","8","9","skip","reverse","draw2"];
   function createDeck() {
@@ -363,8 +362,6 @@
   function startGameScreen(gameState) {
     hideAllScreens();
     document.getElementById("game-screen").classList.remove("hidden");
-    // game listener already active from lobby; but we'll also listen for status changes -> already handled.
-    // refresh game state display
     fetchAndRenderGame();
   }
 
@@ -487,8 +484,8 @@
     if (canPlay(drawn, topCard, gs.chosenColor)) {
       const play = confirm(`You drew ${drawn.color} ${drawn.value}. Play it?`);
       if (play) {
-        const idx = myHand.length-1;
-        myHand.splice(idx, 1);
+        const cardIdx = myHand.length-1;        // ✅ renamed from idx
+        myHand.splice(cardIdx, 1);
         gs.discard.push(drawn);
         if (drawn.color === "wild" || drawn.value === "wild4") {
           const newColor = prompt("Choose color: red, blue, green, yellow")?.toLowerCase();
@@ -497,23 +494,25 @@
         } else gs.chosenColor = drawn.color;
         const dir = gs.direction;
         const order = gs.turnOrder;
-        let idx = gs.currentPlayerIndex;
+        let turnIdx = gs.currentPlayerIndex;    // ✅ renamed from idx (avoids redeclaration)
         if (myHand.length === 1) gs.unoVulnerable = myPlayerId;
         if (drawn.value === "draw2") {
-          const nextIdx = (idx + dir + order.length) % order.length;
+          const nextIdx = (turnIdx + dir + order.length) % order.length;
           gs.hands[order[nextIdx]].push(gs.deck.pop(), gs.deck.pop());
-          idx = (nextIdx + dir + order.length) % order.length;
+          turnIdx = (nextIdx + dir + order.length) % order.length;
         } else if (drawn.value === "reverse") {
           gs.direction = -dir;
-          idx = (idx + gs.direction + order.length) % order.length;
+          turnIdx = (turnIdx + gs.direction + order.length) % order.length;
         } else if (drawn.value === "skip") {
-          idx = (idx + dir + order.length) % order.length;
+          turnIdx = (turnIdx + dir + order.length) % order.length;
         } else if (drawn.value === "wild4") {
-          const nextIdx = (idx + dir + order.length) % order.length;
+          const nextIdx = (turnIdx + dir + order.length) % order.length;
           for(let i=0;i<4;i++) gs.hands[order[nextIdx]].push(gs.deck.pop());
-          idx = (nextIdx + dir + order.length) % order.length;
-        } else idx = (idx + dir + order.length) % order.length;
-        gs.currentPlayerIndex = idx;
+          turnIdx = (nextIdx + dir + order.length) % order.length;
+        } else {
+          turnIdx = (turnIdx + dir + order.length) % order.length;
+        }
+        gs.currentPlayerIndex = turnIdx;
         if (myHand.length === 0) gs.winner = myPlayerId;
         gs.unoVulnerable = null;
         await supabase.from("lobbies").update({
