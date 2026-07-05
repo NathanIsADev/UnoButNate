@@ -44,11 +44,40 @@
     #announcement { font-size: 16px; color: #fff; background: #222; padding: 6px 12px; border-radius: 8px; text-align: center; min-height: 24px; }
     .stack-actions { display: flex; gap: 10px; margin: 5px 0; }
     .timer { font-size: 14px; color: #ffdd00; margin-top: 5px; }
-    .video-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.95); display: flex; align-items: center; justify-content: center; z-index: 1000; }
-    .video-overlay iframe { width: 80vw; height: 80vh; }
-    .victory-splash { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 3em; font-weight: bold; text-align: center; color: yellow; animation: rainbow 2s infinite, pulse 1s infinite alternate; text-shadow: 3px 3px 10px black; z-index: 1001; }
-    @keyframes rainbow { 0%{color:red} 16%{color:orange} 32%{color:yellow} 48%{color:green} 64%{color:blue} 80%{color:indigo} 100%{color:violet} }
-    @keyframes pulse { from { transform: translate(-50%, -50%) scale(1); } to { transform: translate(-50%, -50%) scale(1.05); } }
+    /* Video overlay */
+    .video-overlay {
+      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+      background: #000;
+      display: flex; align-items: center; justify-content: center;
+      z-index: 1000;
+    }
+    .video-container {
+      position: relative;
+      width: 80%;
+      max-width: 800px;
+      padding-bottom: 45%; /* 16:9 */
+      height: 0;
+    }
+    .video-container iframe {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      border: none;
+    }
+    .victory-splash {
+      position: fixed; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 3em; font-weight: bold; text-align: center;
+      color: yellow; animation: rainbow 2s infinite, pulse 1s infinite alternate;
+      text-shadow: 3px 3px 10px black; z-index: 1001;
+    }
+    @keyframes rainbow {
+      0%{color:red} 16%{color:orange} 32%{color:yellow} 48%{color:green} 64%{color:blue} 80%{color:indigo} 100%{color:violet}
+    }
+    @keyframes pulse {
+      from { transform: translate(-50%, -50%) scale(1); }
+      to { transform: translate(-50%, -50%) scale(1.05); }
+    }
   </style>
 </head>
 <body>
@@ -320,7 +349,6 @@
   }
 
   document.getElementById("startGameBtn").addEventListener("click", async () => {
-    // The Forever Stacking and Quick Round values are taken from the creation form (they are already set by OP)
     const foreverStacking = document.getElementById("foreverStackingCheck").checked;
     const quickRound = document.getElementById("quickRoundCheck").checked;
     const { data: lobby, error } = await supabase.from("lobbies").select("*").eq("id", currentLobbyId).single();
@@ -667,7 +695,6 @@
     }).eq("id", currentLobbyId).eq("version", data.version);
   }
 
-  // Stacking functions with timeout reset
   async function attemptStack(card, index) {
     const { data } = await supabase.from("lobbies").select("game_state,version").eq("id", currentLobbyId).single();
     if (!data || !data.game_state) return;
@@ -879,12 +906,14 @@
     }
   }
 
-   function showVictory(winnerId, players) {
-    const VIDEO_DURATION_SECONDS = 61; // <-- change this to the number of seconds you want
+  function showVictory(winnerId, players) {
     const winnerName = players[winnerId]?.username || "Unknown";
     const videoOverlay = document.createElement("div");
     videoOverlay.className = "video-overlay";
-    videoOverlay.innerHTML = `<iframe src="https://www.youtube.com/embed/RVmUx9FERDE?autoplay=1&si=PC5M1HqqVTOkHJ-V" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+    videoOverlay.innerHTML = `
+      <div class="video-container">
+        <iframe src="https://www.youtube.com/embed/RVmUx9FERDE?autoplay=1&controls=0&modestbranding=1&rel=0&showinfo=0&fs=0&iv_load_policy=3" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+      </div>`;
     document.body.appendChild(videoOverlay);
     setTimeout(() => {
       videoOverlay.remove();
@@ -902,19 +931,7 @@
       document.getElementById("leaveGameBtn").style.background = "#ffdd00";
       document.getElementById("leaveGameBtn").style.color = "#000";
       document.getElementById("leaveGameBtn").style.fontWeight = "bold";
-    }, VIDEO_DURATION_SECONDS * 1000);
-  }
-      ];
-      const msg = messages[Math.floor(Math.random() * messages.length)];
-      const splash = document.createElement("div");
-      splash.className = "victory-splash";
-      splash.textContent = msg;
-      document.body.appendChild(splash);
-      updateGameState({ gameOver: true });
-      document.getElementById("leaveGameBtn").style.background = "#ffdd00";
-      document.getElementById("leaveGameBtn").style.color = "#000";
-      document.getElementById("leaveGameBtn").style.fontWeight = "bold";
-    }, 8000);
+    }, 61500); // 61.5 seconds
   }
 
   document.getElementById("leaveGameBtn").addEventListener("click", leaveLobby);
