@@ -44,40 +44,12 @@
     #announcement { font-size: 16px; color: #fff; background: #222; padding: 6px 12px; border-radius: 8px; text-align: center; min-height: 24px; }
     .stack-actions { display: flex; gap: 10px; margin: 5px 0; }
     .timer { font-size: 14px; color: #ffdd00; margin-top: 5px; }
-    /* Video overlay */
-    .video-overlay {
-      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-      background: #000;
-      display: flex; align-items: center; justify-content: center;
-      z-index: 1000;
-    }
-    .video-container {
-      position: relative;
-      width: 80%;
-      max-width: 800px;
-      padding-bottom: 45%; /* 16:9 */
-      height: 0;
-    }
-    .video-container iframe {
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      border: none;
-    }
-    .victory-splash {
-      position: fixed; top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
-      font-size: 3em; font-weight: bold; text-align: center;
-      color: yellow; animation: rainbow 2s infinite, pulse 1s infinite alternate;
-      text-shadow: 3px 3px 10px black; z-index: 1001;
-    }
-    @keyframes rainbow {
-      0%{color:red} 16%{color:orange} 32%{color:yellow} 48%{color:green} 64%{color:blue} 80%{color:indigo} 100%{color:violet}
-    }
-    @keyframes pulse {
-      from { transform: translate(-50%, -50%) scale(1); }
-      to { transform: translate(-50%, -50%) scale(1.05); }
-    }
+    .video-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #000; display: flex; align-items: center; justify-content: center; z-index: 1000; }
+    .video-container { position: relative; width: 80%; max-width: 800px; padding-bottom: 45%; height: 0; }
+    .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
+    .victory-splash { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 3em; font-weight: bold; text-align: center; color: yellow; animation: rainbow 2s infinite, pulse 1s infinite alternate; text-shadow: 3px 3px 10px black; z-index: 1001; }
+    @keyframes rainbow { 0%{color:red} 16%{color:orange} 32%{color:yellow} 48%{color:green} 64%{color:blue} 80%{color:indigo} 100%{color:violet} }
+    @keyframes pulse { from { transform: translate(-50%, -50%) scale(1); } to { transform: translate(-50%, -50%) scale(1.05); } }
   </style>
 </head>
 <body>
@@ -188,7 +160,7 @@
     document.querySelectorAll(".screen").forEach(s => s.classList.add("hidden"));
   }
 
-  // UI MANAGEMENT
+  // ---------- UI MANAGEMENT ----------
   document.getElementById("setUsernameBtn").addEventListener("click", () => {
     const name = document.getElementById("usernameInput").value.trim();
     if (!name) return alert("Enter a username.");
@@ -542,17 +514,11 @@
     if (gs.timeoutCounts[currentPlayerId] >= 3) {
       const players = (await supabase.from("lobbies").select("players,version").eq("id", currentLobbyId).single()).data?.players || {};
       delete players[currentPlayerId];
-      await supabase.from("lobbies").update({
-        players,
-        version: data.version + 1
-      }).eq("id", currentLobbyId).eq("version", data.version);
+      await supabase.from("lobbies").update({ players, version: data.version + 1 }).eq("id", currentLobbyId).eq("version", data.version);
       gs.announcement = `${myUsername} was kicked for inactivity.`;
     }
     gs.unoVulnerable = null;
-    await supabase.from("lobbies").update({
-      game_state: gs,
-      version: data.version + 1
-    }).eq("id", currentLobbyId).eq("version", data.version);
+    await supabase.from("lobbies").update({ game_state: gs, version: data.version + 1 }).eq("id", currentLobbyId).eq("version", data.version);
   }
 
   function applyCardEffect(gs, card) {
@@ -618,10 +584,7 @@
     gs.unoVulnerable = null;
     if (myHand.length === 0) gs.winner = myPlayerId;
     gs.timeoutCounts[myPlayerId] = 0;
-    await supabase.from("lobbies").update({
-      game_state: gs,
-      version: data.version + 1
-    }).eq("id", currentLobbyId).eq("version", data.version);
+    await supabase.from("lobbies").update({ game_state: gs, version: data.version + 1 }).eq("id", currentLobbyId).eq("version", data.version);
   }
 
   async function drawCard() {
@@ -657,20 +620,14 @@
         gs.unoVulnerable = null;
         if (myHand.length === 0) gs.winner = myPlayerId;
         gs.timeoutCounts[myPlayerId] = 0;
-        await supabase.from("lobbies").update({
-          game_state: gs,
-          version: data.version + 1
-        }).eq("id", currentLobbyId).eq("version", data.version);
+        await supabase.from("lobbies").update({ game_state: gs, version: data.version + 1 }).eq("id", currentLobbyId).eq("version", data.version);
         return;
       }
     }
     gs.currentPlayerIndex = (gs.currentPlayerIndex + gs.direction + gs.turnOrder.length) % gs.turnOrder.length;
     gs.unoVulnerable = null;
     gs.timeoutCounts[myPlayerId] = 0;
-    await supabase.from("lobbies").update({
-      game_state: gs,
-      version: data.version + 1
-    }).eq("id", currentLobbyId).eq("version", data.version);
+    await supabase.from("lobbies").update({ game_state: gs, version: data.version + 1 }).eq("id", currentLobbyId).eq("version", data.version);
   }
 
   async function autoDraw() {
@@ -689,10 +646,7 @@
     gs.announcement = `${myUsername} had to draw a card`;
     gs.currentPlayerIndex = (gs.currentPlayerIndex + gs.direction + gs.turnOrder.length) % gs.turnOrder.length;
     gs.unoVulnerable = null;
-    await supabase.from("lobbies").update({
-      game_state: gs,
-      version: data.version + 1
-    }).eq("id", currentLobbyId).eq("version", data.version);
+    await supabase.from("lobbies").update({ game_state: gs, version: data.version + 1 }).eq("id", currentLobbyId).eq("version", data.version);
   }
 
   async function attemptStack(card, index) {
@@ -725,10 +679,7 @@
     idx = (idx + dir + order.length) % order.length;
     gs.currentPlayerIndex = idx;
     gs.timeoutCounts[myPlayerId] = 0;
-    await supabase.from("lobbies").update({
-      game_state: gs,
-      version: data.version + 1
-    }).eq("id", currentLobbyId).eq("version", data.version);
+    await supabase.from("lobbies").update({ game_state: gs, version: data.version + 1 }).eq("id", currentLobbyId).eq("version", data.version);
   }
 
   async function takeCards() {
@@ -752,10 +703,7 @@
     gs.currentPlayerIndex = idx;
     gs.announcement = `${myUsername} took +${count} cards`;
     gs.timeoutCounts[myPlayerId] = 0;
-    await supabase.from("lobbies").update({
-      game_state: gs,
-      version: data.version + 1
-    }).eq("id", currentLobbyId).eq("version", data.version);
+    await supabase.from("lobbies").update({ game_state: gs, version: data.version + 1 }).eq("id", currentLobbyId).eq("version", data.version);
   }
 
   async function callUno() {
@@ -777,10 +725,7 @@
       const players = (await supabase.from("lobbies").select("players").eq("id", currentLobbyId).single()).data?.players || {};
       gs.announcement = `${players[gs.unoVulnerable]?.username} caught without UNO! +2 cards`;
       gs.unoVulnerable = null;
-      await supabase.from("lobbies").update({
-        game_state: gs,
-        version: data.version + 1
-      }).eq("id", currentLobbyId).eq("version", data.version);
+      await supabase.from("lobbies").update({ game_state: gs, version: data.version + 1 }).eq("id", currentLobbyId).eq("version", data.version);
     }
   }
 
@@ -788,10 +733,7 @@
     const { data } = await supabase.from("lobbies").select("game_state,version").eq("id", currentLobbyId).single();
     if (!data) return;
     const newGS = { ...data.game_state, ...partial };
-    await supabase.from("lobbies").update({
-      game_state: newGS,
-      version: data.version + 1
-    }).eq("id", currentLobbyId).eq("version", data.version);
+    await supabase.from("lobbies").update({ game_state: newGS, version: data.version + 1 }).eq("id", currentLobbyId).eq("version", data.version);
   }
 
   function renderGame(gs, players) {
@@ -931,7 +873,7 @@
       document.getElementById("leaveGameBtn").style.background = "#ffdd00";
       document.getElementById("leaveGameBtn").style.color = "#000";
       document.getElementById("leaveGameBtn").style.fontWeight = "bold";
-    }, 61500); // 61.5 seconds
+    }, 61500);
   }
 
   document.getElementById("leaveGameBtn").addEventListener("click", leaveLobby);
